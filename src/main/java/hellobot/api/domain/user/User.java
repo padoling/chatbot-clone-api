@@ -1,19 +1,17 @@
 package hellobot.api.domain.user;
 
 import lombok.Getter;
-
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
-@Entity
+@Document("user")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String name;
 
-    @Enumerated(EnumType.STRING)
     private UserRole userRole;
 }

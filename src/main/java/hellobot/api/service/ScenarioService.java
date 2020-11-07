@@ -2,7 +2,7 @@ package hellobot.api.service;
 
 import hellobot.api.domain.scenario.Scenario;
 import hellobot.api.domain.scenario.ScenarioRepository;
-import hellobot.api.dto.ScenarioPostDto;
+import hellobot.api.dto.ScenarioPostRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +14,19 @@ public class ScenarioService {
     private final ScenarioRepository scenarioRepository;
 
     @Transactional
-    public Long saveScenario(ScenarioPostDto scenarioPostDto) {
-        if(scenarioRepository.findByName(scenarioPostDto.getName()) != null) {
-            // logic
+    public String saveScenario(ScenarioPostRequestDto scenarioPostRequestDto) {
+        if(scenarioRepository.findByName(scenarioPostRequestDto.getName()) == null) {
+            Scenario scenario = scenarioRepository.save(scenarioPostRequestDto.toEntity());
+            //tbd
+            return scenario.getId();
         } else {
-            // throw exception
+            throw new IllegalArgumentException();
         }
-        return 1L;
+    }
+
+    public String getDescMessage(String id) {
+        Scenario scenario = scenarioRepository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+        return scenario.getDescMessage();
     }
 }

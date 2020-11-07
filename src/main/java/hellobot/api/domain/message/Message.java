@@ -1,7 +1,5 @@
-package hellobot.api.domain.session;
+package hellobot.api.domain.message;
 
-import hellobot.api.domain.scenario.Scenario;
-import hellobot.api.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -9,13 +7,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @NoArgsConstructor
-@Document("session")
-public class Session {
+@Document("message")
+public class Message {
 
     @Id
     private String id;
 
-    private User user;
+    private String contents;
 
-    private Scenario scenario;
+    private Integer number;
+
+    private Integer nextInputNum;
+
+    private String scenarioId;
 }

@@ -2,18 +2,18 @@ package hellobot.api.domain.tarot;
 
 import hellobot.api.domain.scenario.Scenario;
 import lombok.Getter;
-
-import javax.persistence.*;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
-@Entity
+@NoArgsConstructor
+@Document("tarot")
 public class Tarot {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
+    private String id;
+    
     private Scenario scenario;
 
     private Integer tarotNum;

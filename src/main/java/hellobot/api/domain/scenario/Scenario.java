@@ -3,28 +3,28 @@ package hellobot.api.domain.scenario;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @NoArgsConstructor
-@Entity
+@Document("scenario")
 public class Scenario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String name;
 
     private String variables;
 
+    private String descMessage;
+
     @Builder
-    public Scenario(String name, String variables) {
+    public Scenario(String name, String variables, String descMessage) {
         this.name = name;
         this.variables = variables;
+        this.descMessage = descMessage;
     }
 }
