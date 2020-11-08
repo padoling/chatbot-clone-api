@@ -1,5 +1,6 @@
 package hellobot.api.domain.input;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -24,4 +25,13 @@ public class Input {
     private List<Integer> nextMessageNums;
 
     private String scenarioId;
+
+    @Builder
+    public Input(InputType inputType, List<String> contents, Integer number, List<Integer> nextMessageNums, String scenarioId) {
+        this.inputType = inputType;
+        this.contents = contents;
+        this.number = number;
+        this.nextMessageNums = nextMessageNums;
+        this.scenarioId = scenarioId;
+    }
 }

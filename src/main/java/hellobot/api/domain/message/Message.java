@@ -1,5 +1,6 @@
 package hellobot.api.domain.message;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -20,4 +21,12 @@ public class Message {
     private Integer nextInputNum;
 
     private String scenarioId;
+
+    @Builder
+    public Message(String contents, Integer number, Integer nextInputNum, String scenarioId) {
+        this.contents = contents;
+        this.number = number;
+        this.nextInputNum = nextInputNum;
+        this.scenarioId = scenarioId;
+    }
 }

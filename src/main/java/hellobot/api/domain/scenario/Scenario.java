@@ -3,7 +3,6 @@ package hellobot.api.domain.scenario;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,7 +21,8 @@ public class Scenario {
     private String descMessage;
 
     @Builder
-    public Scenario(String name, String variables, String descMessage) {
+    public Scenario(String id, String name, String variables, String descMessage) {
+        this.id = id;
         this.name = name;
         this.variables = variables;
         this.descMessage = descMessage;
