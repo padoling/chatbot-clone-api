@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @Document("message")
@@ -16,6 +18,8 @@ public class Message {
 
     private String contents;
 
+    private List<String> imageList;
+
     private Integer number;
 
     private Integer nextInputNum;
@@ -23,8 +27,9 @@ public class Message {
     private String scenarioId;
 
     @Builder
-    public Message(String contents, Integer number, Integer nextInputNum, String scenarioId) {
+    public Message(String contents, List<String> imageList, Integer number, Integer nextInputNum, String scenarioId) {
         this.contents = contents;
+        this.imageList = imageList;
         this.number = number;
         this.nextInputNum = nextInputNum;
         this.scenarioId = scenarioId;

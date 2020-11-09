@@ -1,0 +1,67 @@
+{
+  "name": "썸 연애운",
+  "variables":["who"],
+  "description": "설레는 썸도 좋지만, 언젠가는 확실한 결론이 필요하죠. 빠르게 타로카드 한 장을 뽑아보세요. 라마마의 풀이를 참고해서 다음 단계를 결정해봐요.",
+  "messageDtoList": [
+    {
+      "contents": "내꺼인 듯 내꺼 아닌 내꺼 같은 그 분\n과연 사귀게 될 건지\n사귀면 언제 사귈 건지\n${image:0}\n타로로 점 쳐볼까?",
+      "imageList": ["imageid1"],
+      "number": 1,
+      "nextInputNum": 1
+    },
+    {
+      "contents": "알겠어 ${username}\n보고 싶어지면 그때 다시 시작해보자 😉\n다른 타로도 한 번 확인해봐\n${image:0}",
+      "imageList": ["imageid2"],
+      "number": 2,
+      "nextInputNum": 0
+    },
+    {
+      "contents": "좋아. 우선...\n${userName} 너랑 썸인지 뭔지를 타고 있는 그 분을 내가 뭐라고 부를까?",
+      "number": 3,
+      "nextInputNum": 2
+    },
+    {
+      "contents": "${var:who}이구나 알겠어\n${image:0}\n이제 마음을 차분하게 하고\n${var:who}을 떠올리면서 카드를 한 장 뽑아보자\n${image:1}",
+      "imageList": ["imageid3", "imageid4"],
+      "number": 4,
+      "nextInputNum": 3
+    },
+    {
+      "contents": "${tarot}\n${userName}의 애정운 풀이는 여기까지야\n어떤 것 같아?",
+      "number": 5,
+      "nextInputNum": 4
+    },
+    {
+      "contents": "더 궁금한 게 있음 다른 타로를 한 번 봐봐\n${image:0}",
+      "imageList": ["imageid5"],
+      "number": 6,
+      "nextInputNum": 0
+    }
+  ],
+  "inputDtoList": [
+    {
+      "inputType": "OPTION",
+      "contents": ["응 볼래", "아니 나중에"],
+      "number": 1,
+      "nextMessageNums": [3, 2]
+    },
+    {
+      "inputType": "TEXT",
+      "contents": ["그 사람을 ${var:who} 라고 불러줘"],
+      "number": 2,
+      "nextMessageNums": [4]
+    },
+    {
+      "inputType": "TAROT",
+      "contents": [],
+      "number": 3,
+      "nextMessageNums": [5]
+    },
+    {
+      "inputType": "OPTION",
+      "contents": ["💩우-우", "🍯재밌어요", "🍀도움 돼요", "💪힘이 돼요", "❤️고마워요"],
+      "number": 4,
+      "nextMessageNums": [6]
+    }
+  ]
+}

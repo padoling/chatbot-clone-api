@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -37,7 +36,7 @@ public class ScenarioServiceTest {
         scenario = Scenario.builder()
                 .id("id12345678")
                 .name("썸 연애운")
-                .descMessage("내꺼인 듯 내꺼 아닌 내꺼 같은 그분\n과연 사귀게 될 건지\n사귀면 언제 사귈 건지\n{$imageId1}\n타로로 점 쳐볼까?")
+                .description("설레는 썸도 좋지만, 언젠가는 확실한 결론이 필요하죠. 빠르게 타로카드 한 장을 뽑아보세요.")
                 .build();
     }
 
@@ -80,17 +79,4 @@ public class ScenarioServiceTest {
         });
     }
 
-    @Test
-    public void getDescMessage_success() {
-        // given
-        given(scenarioRepository.findById(any())).willReturn(Optional.of(scenario));
-
-        // when
-        String descMessage = scenarioService.getDescMessage("id12345678");
-
-        // then
-        assertThat(descMessage)
-                .isNotNull()
-                .isEqualTo(scenario.getDescMessage());
-    }
 }

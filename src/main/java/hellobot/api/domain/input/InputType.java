@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 public enum InputType {
 
     TEXT("TYPE_TEXT"),
-    OPTION("TYPE_OPTION");
+    OPTION("TYPE_OPTION"),
+    TAROT("TYPE_TAROT");
 
     private final String inputType;
 }

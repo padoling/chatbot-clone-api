@@ -41,9 +41,4 @@ public class ScenarioService {
         }
     }
 
-    public String getDescMessage(String id) {
-        Scenario scenario = scenarioRepository.findById(id)
-                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND));
-        return scenario.getDescMessage();
-    }
 }

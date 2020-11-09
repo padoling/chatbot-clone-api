@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @Document("scenario")
@@ -16,15 +18,15 @@ public class Scenario {
 
     private String name;
 
-    private String variables;
+    private List<String> variables;
 
-    private String descMessage;
+    private String description;
 
     @Builder
-    public Scenario(String id, String name, String variables, String descMessage) {
+    public Scenario(String id, String name, List<String> variables, String description) {
         this.id = id;
         this.name = name;
         this.variables = variables;
-        this.descMessage = descMessage;
+        this.description = description;
     }
 }

@@ -10,16 +10,16 @@ import java.util.List;
 public class ScenarioPostRequestDto {
 
     private String name;
-    private String variables;
-    private String descMessage;
+    private List<String> variables;
+    private String description;
     private List<MessageDto> messageDtoList;
     private List<InputDto> inputDtoList;
 
     @Builder
-    public ScenarioPostRequestDto(String name, String variables, String descMessage, List<MessageDto> messageDtoList, List<InputDto> inputDtoList) {
+    public ScenarioPostRequestDto(String name, List<String> variables, String description, List<MessageDto> messageDtoList, List<InputDto> inputDtoList) {
         this.name = name;
         this.variables = variables;
-        this.descMessage = descMessage;
+        this.description = description;
         this.messageDtoList = messageDtoList;
         this.inputDtoList = inputDtoList;
     }
@@ -28,7 +28,7 @@ public class ScenarioPostRequestDto {
         return Scenario.builder()
                 .name(name)
                 .variables(variables)
-                .descMessage(descMessage)
+                .description(description)
                 .build();
     }
 

@@ -1,0 +1,41 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+= Hellobot Clone API Documentation
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+
+[NOTE]
+====
+.Documentation Description
+- Request에 포함되는 정보는(body, header, path variable 등) 각 API별로 필요한 요소만 기재하였습니다.
+- HTTP Example에서 실제 요청 및 응답 예시를 확인할 수 있습니다.
+====
+
+== Scenario
+=== Post Scenario
+    새로운 시나리오를 생성한다. 시나리오의 전체 메시지와 흐름에 대한 정보를 포함한다.
+
+.참고
+    messageDtoList[].contents에서 ${}는 포함될 변수나 이미지를 의미함
+    - ${userName}: 사용자 이름
+    - ${var:something}: 변수
+    - ${image:0}: 이미지 id(0부터 시작)
+
+==== Request URL
+    POST /scenario
+
+==== Request
+.[Request Fields]
+include::{snippets}/scenario-post/request-fields.adoc[]
+.[Request HTTP Example]
+include::{snippets}/scenario-post/http-request.adoc[]
+.[Response Fields]
+include::{snippets}/scenario-post/response-fields.adoc[]
+.[Response HTTP Example]
+include::{snippets}/scenario-post/http-response.adoc[]
+
+'''
+
