@@ -1,5 +1,6 @@
 package hellobot.api.domain.image;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -16,4 +17,11 @@ public class Image {
     private String name;
 
     private String imageUrl;
+
+    @Builder
+    public Image(String id, String name, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.imageUrl = imageUrl;
+    }
 }

@@ -32,6 +32,7 @@ endif::[]
 include::{snippets}/scenario-post/request-fields.adoc[]
 .[Request HTTP Example]
 include::{snippets}/scenario-post/http-request.adoc[]
+==== Response
 .[Response Fields]
 include::{snippets}/scenario-post/response-fields.adoc[]
 .[Response HTTP Example]
@@ -39,3 +40,19 @@ include::{snippets}/scenario-post/http-response.adoc[]
 
 '''
 
+=== Get Scenario List
+    저장된 시나리오 목록을 불러온다.
+
+==== Request URL
+    GET /scenario
+
+==== Request
+.[Request Fields]
+include::{snippets}/scenario-list-get/request-parameters.adoc[]
+.[Request HTTP Example]
+include::{snippets}/scenario-list-get/http-request.adoc[]
+==== Response
+.[Response Fields]
+include::{snippets}/scenario-list-get/response-fields.adoc[]
+.[Response HTTP Example]
+include::{snippets}/scenario-list-get/http-response.adoc[]

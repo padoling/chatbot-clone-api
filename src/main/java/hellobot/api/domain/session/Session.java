@@ -1,11 +1,12 @@
 package hellobot.api.domain.session;
 
-import hellobot.api.domain.scenario.Scenario;
-import hellobot.api.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -15,7 +16,20 @@ public class Session {
     @Id
     private String id;
 
-    private User user;
+    private String userId;
 
-    private Scenario scenario;
+    private String scenarioId;
+
+    private Map<String, String> variables;
+
+    private Integer messageNumber;
+
+    @Builder
+    public Session(String id, String userId, String scenarioId, Map<String, String> variables, Integer messageNumber) {
+        this.id = id;
+        this.userId = userId;
+        this.scenarioId = scenarioId;
+        this.variables = variables;
+        this.messageNumber = messageNumber;
+    }
 }

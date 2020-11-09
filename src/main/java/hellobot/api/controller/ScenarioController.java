@@ -3,6 +3,8 @@ package hellobot.api.controller;
 import hellobot.api.dto.ScenarioPostRequestDto;
 import hellobot.api.service.ScenarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,19 @@ public class ScenarioController {
         Map<String, String> response = new HashMap<>();
         response.put("scenarioId", scenarioService.saveScenario(scenarioPostRequestDto));
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity getScenarioList(@PageableDefault(sort = {"id"}) Pageable pageable) {
+        return new ResponseEntity<>(scenarioService.findScenarioList(pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/{scenarioId}")
+    public ResponseEntity getNextMessage(@PathVariable String scenarioId,
+                                         @RequestParam String userId,
+                                         @RequestParam(required = false) Map<String, String> content,
+                                         @RequestParam int nextMessageNum) {
+        return new ResponseEntity<>(scenarioService.findNextMessage(scenarioId, userId, content, nextMessageNum), HttpStatus.OK);
     }
 
 }

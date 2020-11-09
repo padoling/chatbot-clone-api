@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 public class MessageDto {
 
+    private String id;
     private String contents;
     private List<String> imageList;
     private Integer number;
@@ -18,12 +19,22 @@ public class MessageDto {
     private String scenarioId;
 
     @Builder
-    public MessageDto(String contents, List<String> imageList, Integer number, Integer nextInputNum, String scenarioId) {
+    public MessageDto(String id, String contents, List<String> imageList, Integer number, Integer nextInputNum, String scenarioId) {
+        this.id = id;
         this.contents = contents;
         this.imageList = imageList;
         this.number = number;
         this.nextInputNum = nextInputNum;
         this.scenarioId = scenarioId;
+    }
+
+    public MessageDto(Message document) {
+        this.id = document.getId();
+        this.contents = document.getContents();
+        this.imageList = document.getImageList();
+        this.number = document.getNumber();
+        this.nextInputNum = document.getNextInputNum();
+        this.scenarioId = document.getScenarioId();
     }
 
     public Message toEntity() {
