@@ -17,8 +17,8 @@ public class ImageController {
     private final ImageService imageService;
 
     @PostMapping
-    public ResponseEntity postImage(@RequestPart String name,
-                                    @RequestPart MultipartFile imageFile) {
+    public ResponseEntity postImage(@RequestParam String name,
+                                    @RequestParam MultipartFile imageFile) {
         return new ResponseEntity<>(imageService.saveImage(name, imageFile), HttpStatus.CREATED);
     }
 

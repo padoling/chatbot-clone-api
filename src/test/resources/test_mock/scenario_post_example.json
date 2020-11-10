@@ -1,0 +1,43 @@
+{
+  "name": "솔로 연애운",
+  "variables": ["userName"],
+  "description": "오늘따라 뭔가 솔로 생활이 외롭게 느껴지시나요? 타로 한 장 뽑아보는 거 어때요?",
+  "messageDtoList": [
+    {
+      "contents": "솔로 연애운을 보면 당분간 너의 연애운이 어떨지 알 수 있어\n슬슬 연애하고 싶은 맘이 든다면\n${image:0}\n지금 ${var:userName}의 연애운을 점쳐볼까?",
+      "imageList": ["imageid1"],
+      "number": 1,
+      "nextInputNum": 1
+    },
+    {
+      "contents": "그래 좋아\n다른 게 궁금하면 다른 타로를 확인해봐 ${var:userName}",
+      "number": 2,
+      "nextInputNum": 0
+    },
+    {
+      "contents": "오키 타로 봐주기 전에 손 소독하구....\n${image:0}\n자, 그럼 차분하게 ${var:userName}의 마음에 집중하면서 카드를 한 장 뽑아봐\n${image:1}",
+      "imageList": ["imageid2", "imageid3"],
+      "number": 3,
+      "nextInputNum": 2
+    },
+    {
+      "contents": "${tarot}\n당분간 연애운에 대한 풀이는 여기까지야 ${var:userName}",
+      "number": 4,
+      "nextInputNum": 0
+    }
+  ],
+  "inputDtoList": [
+    {
+      "inputType": "OPTION",
+      "contents": ["응 볼래", "아니 나중에"],
+      "number": 1,
+      "nextMessageNums": [3, 2]
+    },
+    {
+      "inputType": "TAROT",
+      "contents": [],
+      "number": 2,
+      "nextMessageNums": [4]
+    }
+  ]
+}

@@ -2,6 +2,7 @@ package hellobot.api.service;
 
 import hellobot.api.domain.input.Input;
 import hellobot.api.domain.input.InputRepository;
+import hellobot.api.domain.input.InputType;
 import hellobot.api.domain.message.Message;
 import hellobot.api.domain.message.MessageRepository;
 import hellobot.api.domain.scenario.Scenario;
@@ -11,6 +12,7 @@ import hellobot.api.domain.session.SessionRepository;
 import hellobot.api.dto.*;
 import hellobot.api.global.error.ErrorCode;
 import hellobot.api.global.error.GlobalException;
+import hellobot.api.global.util.MessageBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,7 @@ public class ScenarioService {
     private final InputRepository inputRepository;
     private final SessionRepository sessionRepository;
     private final ImageService imageService;
+    private final MessageBuilder messageBuilder;
 
     @Transactional
     public String saveScenario(ScenarioPostRequestDto scenarioPostRequestDto) {
@@ -61,40 +64,52 @@ public class ScenarioService {
     }
 
     @Transactional
-    public NextMessageDto findNextMessage(String scenarioId, String userId, Map<String, String> content, int nextMessageNum) {
+    public NextMessageDto findNextMessage(String scenarioId, String userId, InputType inputType, Map<String, String> contentMap, int nextMessageNum) {
         Session session = sessionRepository.findByUserId(userId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND, "Session not found."));
-        if(session.getScenarioId().equals(scenarioId)) {
-            Message message = messageRepository.findByScenarioIdAndNumber(scenarioId, nextMessageNum)
-                    .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND));
-            Input input = inputRepository.findByScenarioIdAndNumber(scenarioId, message.getNextInputNum())
-                    .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND));
-            String messageContent = message.getContents();
-            Map<String, String> variables = session.getVariables();
+        Message message = messageRepository.findByScenarioIdAndNumber(scenarioId, nextMessageNum)
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND));
 
-            if(content.get("tarotNum") != null) {
-                // get tarot message and make messages
-            } else {
-                // make variables and messages
-            }
-            List<String> imageUrlList = imageService.findImageListById(message.getImageList()).stream()
-                    .map(ImageDto::getImageUrl)
-                    .collect(Collectors.toList());
+        Map<String, String> variables = session.getVariables();
+        if(inputType.equals(InputType.TAROT)) {
+            //TODO tarot
+        } else if(inputType.equals(InputType.TEXT)) {
+            variables.putAll(contentMap);
+        }
 
-            // update session
-            SessionDto sessionDto = new SessionDto(session);
-            sessionDto.setMessageNumber(message.getNumber());
-            sessionRepository.save(sessionDto.toEntity());
+        //message builder
+        String messageContent = messageBuilder.applyVariables(message.getContents(), variables);
+        // get image urls
+        List<String> imageUrlList = imageService.findImageListById(message.getImageList()).stream()
+                .map(ImageDto::getImageUrl)
+                .collect(Collectors.toList());
 
+        // finish session
+        if(message.getNextInputNum() == 0) {
+            sessionRepository.deleteById(session.getId());
             return NextMessageDto.builder()
                     .messageContent(messageContent)
                     .imageUrlList(imageUrlList)
-                    .inputType(input.getInputType())
-                    .inputContents(input.getContents())
-                    .nextMessageNums(input.getNextMessageNums())
+                    .inputType(InputType.END)
                     .build();
         }
-        return null;
+
+        // update session
+        SessionDto sessionDto = new SessionDto(session);
+        sessionDto.setMessageNumber(message.getNumber());
+        sessionDto.setVariables(variables);
+        sessionRepository.save(sessionDto.toEntity());
+
+        Input input = inputRepository.findByScenarioIdAndNumber(scenarioId, message.getNextInputNum())
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND));
+
+        return NextMessageDto.builder()
+                .messageContent(messageContent)
+                .imageUrlList(imageUrlList)
+                .inputType(input.getInputType())
+                .inputContents(input.getContents())
+                .nextMessageNums(input.getNextMessageNums())
+                .build();
     }
 
 }

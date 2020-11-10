@@ -1,5 +1,6 @@
 package hellobot.api.controller;
 
+import hellobot.api.domain.input.InputType;
 import hellobot.api.dto.ScenarioPostRequestDto;
 import hellobot.api.service.ScenarioService;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +35,10 @@ public class ScenarioController {
     @GetMapping("/{scenarioId}")
     public ResponseEntity getNextMessage(@PathVariable String scenarioId,
                                          @RequestParam String userId,
-                                         @RequestParam(required = false) Map<String, String> content,
+                                         @RequestParam InputType inputType,
+                                         @RequestParam(required = false) Map<String, String> contentMap,
                                          @RequestParam int nextMessageNum) {
-        return new ResponseEntity<>(scenarioService.findNextMessage(scenarioId, userId, content, nextMessageNum), HttpStatus.OK);
+        return new ResponseEntity<>(scenarioService.findNextMessage(scenarioId, userId, inputType, contentMap, nextMessageNum), HttpStatus.OK);
     }
 
 }

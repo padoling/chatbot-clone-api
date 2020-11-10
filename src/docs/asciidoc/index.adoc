@@ -19,10 +19,13 @@ endif::[]
     새로운 시나리오를 생성한다. 시나리오의 전체 메시지와 흐름에 대한 정보를 포함한다.
 
 .참고
-    messageDtoList[].contents에서 ${}는 포함될 변수나 이미지를 의미함
-    - ${userName}: 사용자 이름
-    - ${var:something}: 변수
-    - ${image:0}: 이미지 id(0부터 시작)
+    * messageDtoList[].contents에서 ${}는 변수나 이미지를 의미한다. 사용자의 input에 따라 동적으로 변할 수 있다.
+    ** ${var:variableName}: 변수 이름
+    ** ${image:0}: 이미지 id(0부터 시작)
+    ** ${tarot}: 타로 카드 해석 내용
+    * variables에 시나리오에서 사용할 변수들을 미리 지정해 놓아야 한다. 단, 사용자 이름은 반드시 'userName'이라는 변수 이름을 사용해야 한다.
+    * messageDtoList[].nextInputNum은 해당 메시지 다음에 올 inputDto의 number를 의미한다. 단, 0은 시나리오 종료를 의미한다.
+    * inputDtoList[].nextMessageNums는 해당 응답 다음에 올 messageDto의 number를 의미한다. 단, inputType이 OPTION인 경우 각 옵션에 대해 message number가 리스트 인덱스 순서대로 매핑된다.
 
 ==== Request URL
     POST /scenario
@@ -56,3 +59,119 @@ include::{snippets}/scenario-list-get/http-request.adoc[]
 include::{snippets}/scenario-list-get/response-fields.adoc[]
 .[Response HTTP Example]
 include::{snippets}/scenario-list-get/http-response.adoc[]
+
+'''
+
+=== Get Next Message
+    유저의 응답에 따라 시나리오의 다음 메시지를 불러온다.
+
+==== Request URL
+    GET /scenario/{scenarioId}?userId={userId}&inputType={inputType}&contentMap={contentMap}&nextMessageNum={nextMessageNum}
+
+==== Request
+.[Path Parameters]
+include::{snippets}/scenario-get-next-message/path-parameters.adoc[]
+.[Request parameters]
+include::{snippets}/scenario-get-next-message/request-parameters.adoc[]
+.[Request HTTP Example]
+include::{snippets}/scenario-get-next-message/http-request.adoc[]
+==== Response
+.[Response Fields]
+include::{snippets}/scenario-get-next-message/response-fields.adoc[]
+.[Response HTTP Example]
+include::{snippets}/scenario-get-next-message/http-response.adoc[]
+
+
+== Session
+=== Start Session
+    새로운 세션을 생성하거나 기존 세션을 업데이트하여 세션을 시작한다.
+
+==== Request URL
+    POST /session
+
+==== Request
+.[Request Fields]
+include::{snippets}/session-post/request-fields.adoc[]
+.[Request HTTP Example]
+include::{snippets}/session-post/http-request.adoc[]
+==== Response
+.[Response Fields]
+include::{snippets}/session-post/response-fields.adoc[]
+.[Response HTTP Example]
+include::{snippets}/session-post/http-response.adoc[]
+
+'''
+
+=== Get Session By UserId
+    유저 id로 현재 유저의 세션을 불러온다.
+
+==== Request URL
+    GET /session?userId={userId}
+
+==== Request
+.[Request Parameters]
+include::{snippets}/session-get-by-userid/request-parameters.adoc[]
+.[Request HTTP Example]
+include::{snippets}/session-get-by-userid/http-request.adoc[]
+==== Response
+.[Response Fields]
+include::{snippets}/session-get-by-userid/response-fields.adoc[]
+.[Response HTTP Example]
+include::{snippets}/session-get-by-userid/http-response.adoc[]
+
+'''
+
+=== Finish Session
+    현재 유저의 세션을 종료한다.
+
+==== Request URL
+    DELETE /session/{sessionId}
+
+==== Request
+.[Path Parameters]
+include::{snippets}/session-delete/path-parameters.adoc[]
+.[Request HTTP Example]
+include::{snippets}/session-delete/http-request.adoc[]
+==== Response
+.[Response HTTP Example]
+include::{snippets}/session-delete/http-response.adoc[]
+
+
+== Image
+=== Post Image
+    새 이미지 파일을 저장한다.
+
+==== Request URL
+    POST /image
+
+==== Request
+.[Request Part Body Example]
+include::{snippets}/image-post/request-part-imageFile-body.adoc[]
+.[Request Parameters]
+include::{snippets}/image-post/request-parameters.adoc[]
+.[Request HTTP Example]
+include::{snippets}/image-post/http-request.adoc[]
+==== Response
+.[Response Fields]
+include::{snippets}/image-post/response-fields.adoc[]
+.[Response HTTP Example]
+include::{snippets}/image-post/http-response.adoc[]
+
+'''
+
+=== Get Image list
+    저장된 이미지 목록을 전부 불러온다.
+
+==== Request URL
+    GET /image
+
+==== Request
+.[Request Fields]
+include::{snippets}/image-list-get/request-parameters.adoc[]
+.[Request HTTP Example]
+include::{snippets}/image-list-get/http-request.adoc[]
+==== Response
+.[Response Fields]
+include::{snippets}/image-list-get/response-fields.adoc[]
+.[Response HTTP Example]
+include::{snippets}/image-list-get/http-response.adoc[]

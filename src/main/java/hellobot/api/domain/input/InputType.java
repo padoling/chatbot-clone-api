@@ -7,7 +7,8 @@ public enum InputType {
 
     TEXT("TYPE_TEXT"),
     OPTION("TYPE_OPTION"),
-    TAROT("TYPE_TAROT");
+    TAROT("TYPE_TAROT"),
+    END("TYPE_END");
 
     private final String inputType;
 }

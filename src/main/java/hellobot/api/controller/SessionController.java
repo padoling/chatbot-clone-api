@@ -7,9 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/session")
@@ -19,18 +16,17 @@ public class SessionController {
 
     @PostMapping
     public ResponseEntity startSession(@RequestBody SessionDto sessionDto) {
-        return new ResponseEntity<>(sessionService.saveSession(sessionDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(sessionService.saveOrUpdateSession(sessionDto), HttpStatus.CREATED);
     }
 
-    @PatchMapping
-    public ResponseEntity updateSession() {
-        //TODO
-        return null;
+    @GetMapping
+    public ResponseEntity getSessionByUserId(@RequestParam String userId) {
+        return new ResponseEntity<>(sessionService.findSessionByUserId(userId), HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity finishSession() {
-        //TODO
-        return null;
+    @DeleteMapping("/{sessionId}")
+    public ResponseEntity finishSession(@PathVariable String sessionId) {
+        sessionService.deleteSession(sessionId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
