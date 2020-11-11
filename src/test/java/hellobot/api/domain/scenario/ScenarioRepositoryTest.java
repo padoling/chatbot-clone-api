@@ -19,7 +19,7 @@ public class ScenarioRepositoryTest extends RepositoryTest {
         // given
         List<String> variable = new ArrayList<>();
         variable.add("who");
-        final Scenario scenario = Scenario.builder()
+        Scenario scenario = Scenario.builder()
                 .name("썸 연애운")
                 .variables(variable)
                 .description("설레는 썸도 좋지만, 언젠가는 확실한 결론이 필요하죠. 빠르게 타로카드 한 장을 뽑아보세요. 라마마의 풀이를 참고해서 다음 단계를 결정해봐요.")

@@ -10,7 +10,7 @@ endif::[]
 [NOTE]
 ====
 .Documentation Description
-- Request에 포함되는 정보는(body, header, path variable 등) 각 API별로 필요한 요소만 기재하였습니다.
+- Request에 포함되는 정보(body, path variable 등)는 각 API별로 필요한 요소만 기재하였습니다.
 - HTTP Example에서 실제 요청 및 응답 예시를 확인할 수 있습니다.
 ====
 
@@ -21,9 +21,9 @@ endif::[]
 .참고
     * messageDtoList[].contents에서 ${}는 변수나 이미지를 의미한다. 사용자의 input에 따라 동적으로 변할 수 있다.
     ** ${var:variableName}: 변수 이름
-    ** ${image:0}: 이미지 id(0부터 시작)
+    ** ${image:0}: imageList의 이미지 인덱스(0부터 시작)
     ** ${tarot}: 타로 카드 해석 내용
-    * variables에 시나리오에서 사용할 변수들을 미리 지정해 놓아야 한다. 단, 사용자 이름은 반드시 'userName'이라는 변수 이름을 사용해야 한다.
+    * variables에 시나리오에서 사용할 변수들을 미리 지정해 놓아야 한다.
     * messageDtoList[].nextInputNum은 해당 메시지 다음에 올 inputDto의 number를 의미한다. 단, 0은 시나리오 종료를 의미한다.
     * inputDtoList[].nextMessageNums는 해당 응답 다음에 올 messageDto의 number를 의미한다. 단, inputType이 OPTION인 경우 각 옵션에 대해 message number가 리스트 인덱스 순서대로 매핑된다.
 
@@ -60,27 +60,6 @@ include::{snippets}/scenario-list-get/response-fields.adoc[]
 .[Response HTTP Example]
 include::{snippets}/scenario-list-get/http-response.adoc[]
 
-'''
-
-=== Get Next Message
-    유저의 응답에 따라 시나리오의 다음 메시지를 불러온다.
-
-==== Request URL
-    GET /scenario/{scenarioId}?userId={userId}&inputType={inputType}&contentMap={contentMap}&nextMessageNum={nextMessageNum}
-
-==== Request
-.[Path Parameters]
-include::{snippets}/scenario-get-next-message/path-parameters.adoc[]
-.[Request parameters]
-include::{snippets}/scenario-get-next-message/request-parameters.adoc[]
-.[Request HTTP Example]
-include::{snippets}/scenario-get-next-message/http-request.adoc[]
-==== Response
-.[Response Fields]
-include::{snippets}/scenario-get-next-message/response-fields.adoc[]
-.[Response HTTP Example]
-include::{snippets}/scenario-get-next-message/http-response.adoc[]
-
 
 == Session
 === Start Session
@@ -106,11 +85,11 @@ include::{snippets}/session-post/http-response.adoc[]
     유저 id로 현재 유저의 세션을 불러온다.
 
 ==== Request URL
-    GET /session?userId={userId}
+    GET /session/user/{userId}
 
 ==== Request
-.[Request Parameters]
-include::{snippets}/session-get-by-userid/request-parameters.adoc[]
+.[Path Parameters]
+include::{snippets}/session-get-by-userid/path-parameters.adoc[]
 .[Request HTTP Example]
 include::{snippets}/session-get-by-userid/http-request.adoc[]
 ==== Response
@@ -118,6 +97,25 @@ include::{snippets}/session-get-by-userid/http-request.adoc[]
 include::{snippets}/session-get-by-userid/response-fields.adoc[]
 .[Response HTTP Example]
 include::{snippets}/session-get-by-userid/http-response.adoc[]
+
+'''
+
+=== Get Next Message
+    유저의 응답에 따라 시나리오의 다음 메시지를 불러온다.
+
+==== Request URL
+    GET /session/message?scenarioId={scenarioId}userId={userId}&inputType={inputType}&contentMap={contentMap}&nextMessageNum={nextMessageNum}
+
+==== Request
+.[Request parameters]
+include::{snippets}/session-get-next-message/request-parameters.adoc[]
+.[Request HTTP Example]
+include::{snippets}/session-get-next-message/http-request.adoc[]
+==== Response
+.[Response Fields]
+include::{snippets}/session-get-next-message/response-fields.adoc[]
+.[Response HTTP Example]
+include::{snippets}/session-get-next-message/http-response.adoc[]
 
 '''
 
@@ -175,3 +173,60 @@ include::{snippets}/image-list-get/http-request.adoc[]
 include::{snippets}/image-list-get/response-fields.adoc[]
 .[Response HTTP Example]
 include::{snippets}/image-list-get/http-response.adoc[]
+
+
+== User
+=== Post Test User
+    테스트 유저를 추가한다.
+
+==== Request URL
+    POST /user
+
+==== Request
+.[Request Fields]
+include::{snippets}/test-user-post/request-fields.adoc[]
+.[Request HTTP Example]
+include::{snippets}/test-user-post/http-request.adoc[]
+==== Response
+.[Response Fields]
+include::{snippets}/test-user-post/request-fields.adoc[]
+.[Response HTTP Example]
+include::{snippets}/test-user-post/http-response.adoc[]
+
+
+== Tarot
+=== Post Tarot
+    특정 시나리오의 특정 타로 카드 번호에 따른 해석을 추가한다.
+
+==== Request URL
+    POST /tarot
+
+==== Request
+.[Request Fields]
+include::{snippets}/tarot-post/request-fields.adoc[]
+.[Request HTTP Example]
+include::{snippets}/tarot-post/http-request.adoc[]
+==== Response
+.[Response Fields]
+include::{snippets}/tarot-post/response-fields.adoc[]
+.[Response HTTP Example]
+include::{snippets}/tarot-post/http-response.adoc[]
+
+'''
+
+=== Get Tarot List
+    저장된 타로 해석 목록을 전부 불러온다.
+
+==== Request URL
+    GET /tarot
+
+==== Request
+.[Request Parameters]
+include::{snippets}/tarot-list-get/request-parameters.adoc[]
+.[Request HTTP Example]
+include::{snippets}/tarot-list-get/http-request.adoc[]
+==== Response
+.[Response Fields]
+include::{snippets}/tarot-list-get/response-fields.adoc[]
+.[Response HTTP Example]
+include::{snippets}/tarot-list-get/http-response.adoc[]

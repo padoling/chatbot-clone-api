@@ -1,6 +1,6 @@
 package hellobot.api.domain.tarot;
 
-import hellobot.api.domain.scenario.Scenario;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -14,9 +14,17 @@ public class Tarot {
     @Id
     private String id;
     
-    private Scenario scenario;
+    private String scenarioId;
 
     private Integer tarotNum;
 
     private String description;
+
+    @Builder
+    public Tarot(String id, String scenarioId, Integer tarotNum, String description) {
+        this.id = id;
+        this.scenarioId = scenarioId;
+        this.tarotNum = tarotNum;
+        this.description = description;
+    }
 }

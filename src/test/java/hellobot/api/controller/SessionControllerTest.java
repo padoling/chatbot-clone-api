@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hellobot.api.IntegrationTest;
 import hellobot.api.domain.image.Image;
 import hellobot.api.domain.image.ImageRepository;
+import hellobot.api.domain.input.InputType;
 import hellobot.api.domain.scenario.Scenario;
 import hellobot.api.domain.scenario.ScenarioRepository;
 import hellobot.api.domain.session.Session;
@@ -24,6 +25,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static hellobot.api.restdocs.ApiDocumentUtils.getDocumentRequest;
@@ -57,23 +59,23 @@ public class SessionControllerTest extends IntegrationTest {
     @BeforeEach
     public void setUp() {
         ScenarioPostRequestDto scenarioPostRequestDto = (ScenarioPostRequestDto)jsonToObject("classpath:test_mock/scenario_post_request.json", new TypeReference<ScenarioPostRequestDto>(){});
-        scenarioService.saveScenario(scenarioPostRequestDto);
-        userRepository.save(User.builder()
+        String scenarioId = scenarioService.saveScenario(scenarioPostRequestDto);
+        User user = userRepository.save(User.builder()
+                .id("userId")
                 .name("박세림")
                 .userRole(UserRole.ADMIN)
                 .build());
-        imageRepository.save(Image.builder()
-                .id("imageid1")
-                .imageUrl("image/1604940118574_lamama.png")
-                .build());
+
         Map<String, String> variables = new HashMap<>();
-        variables.put("userName", "박세림");
+        variables.put("userName", user.getName());
         sessionRepository.save(Session.builder()
-                .userId("userId")
-                .scenarioId("scenarioId")
+                .userId(user.getId())
+                .scenarioId(scenarioId)
                 .variables(variables)
                 .messageNumber(1)
                 .build());
+        List<Image> imageList = (List<Image>) jsonToObject("classpath:test_mock/image_post_example.json", new TypeReference<List<Image>>(){});
+        imageRepository.saveAll(imageList);
     }
 
     @AfterEach
@@ -88,7 +90,11 @@ public class SessionControllerTest extends IntegrationTest {
     public void startSession_success() throws Exception {
         // given
         Scenario scenario = scenarioRepository.findAll().get(0);
-        User user = userRepository.findAll().get(0);
+        User user = userRepository.save(User.builder()
+                .name("tester")
+                .userRole(UserRole.USER)
+                .build()
+        );
         SessionDto sessionDto = SessionDto.builder()
                 .userId(user.getId())
                 .scenarioId(scenario.getId())
@@ -133,8 +139,7 @@ public class SessionControllerTest extends IntegrationTest {
 
         // when
         ResultActions resultActions = mvc.perform(
-                get("/session")
-                .param("userId", userId)
+                get("/session/user/{userId}", userId)
                 .accept(MediaType.APPLICATION_JSON)
         );
 
@@ -144,7 +149,7 @@ public class SessionControllerTest extends IntegrationTest {
                 .andDo(document("session-get-by-userid",
                         getDocumentRequest(),
                         getDocumentResponse(),
-                        requestParameters(
+                        pathParameters(
                                 parameterWithName("userId").description("유저 id")
                         ),
                         responseFields(
@@ -176,6 +181,50 @@ public class SessionControllerTest extends IntegrationTest {
                         getDocumentResponse(),
                         pathParameters(
                                 parameterWithName("sessionId").description("삭제할 세션 id")
+                        )
+                ));
+    }
+
+    @Test
+    public void getNextMessage_success() throws Exception {
+        // given
+        String userId = "userId";
+        InputType inputType = InputType.OPTION;
+        int nextMessageNum = 3;
+        Session session = sessionRepository.findByUserId(userId).orElse(null);
+        String scenarioId = session.getScenarioId();
+        Map<String, String> contentMap = new HashMap<>();
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                get("/session/message")
+                        .param("scenarioId", scenarioId)
+                        .param("userId", userId)
+                        .param("inputType", inputType.toString())
+                        .param("contents", String.valueOf(contentMap))
+                        .param("nextMessageNum", String.valueOf(nextMessageNum))
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        resultActions
+                .andExpect(status().isOk())
+                .andDo(document("session-get-next-message",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("scenarioId").description("시나리오 id"),
+                                parameterWithName("userId").description("유저 id"),
+                                parameterWithName("inputType").description("유저의 응답 유형"),
+                                parameterWithName("contents").description("inputType이 TEXT나 TAROT인 경우, user의 응답 내용(url encoded json)").optional(),
+                                parameterWithName("nextMessageNum").description("다음 순서의 메시지 번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("messageContent").type(JsonFieldType.STRING).description("보여질 메시지 내용"),
+                                fieldWithPath("imageUrlList").type(JsonFieldType.ARRAY).description("메시지 내용에 들어갈 이미지 url 리스트").optional(),
+                                fieldWithPath("inputType").type(JsonFieldType.STRING).description("메시지 이후 받을 수 있는 응답 유형"),
+                                fieldWithPath("inputContents").type(JsonFieldType.ARRAY).description("메시지 이후 받을 수 있는 응답 내용").optional(),
+                                fieldWithPath("nextMessageNums").type(JsonFieldType.ARRAY).description("유저 응답에 따라 매칭될 다음 번 메시지 번호").optional()
                         )
                 ));
     }

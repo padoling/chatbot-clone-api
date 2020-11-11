@@ -1,6 +1,5 @@
 package hellobot.api.controller;
 
-import hellobot.api.domain.input.InputType;
 import hellobot.api.dto.ScenarioPostRequestDto;
 import hellobot.api.service.ScenarioService;
 import lombok.RequiredArgsConstructor;
@@ -30,15 +29,6 @@ public class ScenarioController {
     @GetMapping
     public ResponseEntity getScenarioList(@PageableDefault(sort = {"id"}) Pageable pageable) {
         return new ResponseEntity<>(scenarioService.findScenarioList(pageable), HttpStatus.OK);
-    }
-
-    @GetMapping("/{scenarioId}")
-    public ResponseEntity getNextMessage(@PathVariable String scenarioId,
-                                         @RequestParam String userId,
-                                         @RequestParam InputType inputType,
-                                         @RequestParam(required = false) Map<String, String> contentMap,
-                                         @RequestParam int nextMessageNum) {
-        return new ResponseEntity<>(scenarioService.findNextMessage(scenarioId, userId, inputType, contentMap, nextMessageNum), HttpStatus.OK);
     }
 
 }
